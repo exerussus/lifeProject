@@ -6,14 +6,14 @@ namespace src.Scripts.Abstraction
     {
         protected void UpdateMark<T>(EcsPool<T> ecsPool, int entity) where T : struct
         {
-            var harvestingComponent = ecsPool.Has(entity);
+            var hasComponent = ecsPool.Has(entity);
             if (MarkCondition(entity))
             {
-                if (!harvestingComponent) ecsPool.Add(entity);
+                if (!hasComponent) ecsPool.Add(entity);
             }
             else
             {
-                if (harvestingComponent) ecsPool.Del(entity);
+                if (hasComponent) ecsPool.Del(entity);
             }
         }
         

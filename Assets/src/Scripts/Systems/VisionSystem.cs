@@ -20,6 +20,8 @@ namespace src.Scripts.Systems
         protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
         {
             _visionPool = GetPool<VisionComponent>();
+            _transformPool = GetPool<TransformComponent>();
+            _memoryPool = GetPool<MemoryComponent>();
         }
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
@@ -29,18 +31,43 @@ namespace src.Scripts.Systems
             ref var memoryComponent = ref _memoryPool.Get(entity);
             var lineSight = visionComponent.lineSight;
             var rangeSight = visionComponent.rangeSight;
-            
-            for (int i = 0; i < 5; i++)
+            const int rayCount = 5;
+
+            float j = 0;
+
+            for (int i = 0; i < rayCount; i++)
             {
-                float angle = (-lineSight / 2f) + (lineSight / 4f) + ((lineSight / 4f) * i);
-                Vector3 direction = Quaternion.Euler(0f, angle, 0f) * transformComponent.transform.forward;
-                RaycastHit2D hit = Physics2D.Raycast(transformComponent.transform.position, direction, rangeSight);
-                if (hit.collider != null)
+                var x = Mathf.Sin(j);
+                var y = Mathf.Cos(j);
+
+                j += (lineSight / rayCount) * Mathf.Deg2Rad;
+
+                Vector2 direction = transformComponent.transform.TransformDirection(new Vector2(x, y));
+                CastRay(direction, transformComponent.transform.position, rangeSight, memoryComponent);
+
+                if (x != 0)
                 {
-                    var detectedGameObject = hit.collider.gameObject;
-                    var entityHandler = detectedGameObject.GetComponent<EntityHandler>();
-                    if (entityHandler != null) memoryComponent.detectedEntities.Add(entityHandler);
+                    direction = transformComponent.transform.TransformDirection(new Vector3(-x, y, 0));
+                    CastRay(direction, transformComponent.transform.position, rangeSight, memoryComponent);
                 }
+            }
+        }
+
+        private void CastRay(Vector2 direction, Vector3 position, float rangeSight, MemoryComponent memoryComponent)
+        {
+        
+            RaycastHit2D hit = Physics2D.Raycast(position, direction, rangeSight);
+
+            if(hit.collider != null)
+            {
+                var detectedGameObject = hit.collider.gameObject;
+                var entityHandler = detectedGameObject.GetComponent<EntityHandler>();
+                if (entityHandler != null) memoryComponent.detectedEntities.Add(entityHandler);
+                Debug.DrawLine(position, hit.point, Color.green);
+            }
+            else
+            {
+                Debug.DrawRay(position, direction * rangeSight, Color.red);
             }
         }
     }

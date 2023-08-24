@@ -69,8 +69,10 @@ namespace src.Scripts.MonoBehaviours
         {
             _fixedUpdateSystems = new EcsSystems(_world, gameData);
             _fixedUpdateSystems
-                .Add(new  MovementSystem())
-                .Add(new HerbivoreHungerBehaviourSystem());
+                .Add(new MovementSystem())
+                .Add(new HerbivoreHungerBehaviourSystem())
+                .Add(new DeterminantSystem())
+                .Add(new VisionSystem());
             _fixedUpdateSystems.Init();
         }
         

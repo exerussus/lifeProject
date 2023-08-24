@@ -14,8 +14,8 @@ namespace src.Scripts.Data
         [SerializeField] private float maxHealth;
         [SerializeField] private float maxStamina;
         [SerializeField] private int fraction;
-        [SerializeField] private float rangeOfSight;
-        [SerializeField] private float lineOfSight;
+        [Range(1f, 10f)][SerializeField] private float rangeOfSight;
+        [Range(1f, 300f)][SerializeField] private float lineOfSight;
 
         public GameObject Prefab => prefab;
         public float MoveSpeed => moveSpeed;

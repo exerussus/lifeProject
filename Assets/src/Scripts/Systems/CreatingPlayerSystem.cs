@@ -1,4 +1,5 @@
-﻿using Leopotam.EcsLite;
+﻿using System.Collections.Generic;
+using Leopotam.EcsLite;
 using src.Scripts.Abstraction;
 using src.Scripts.Components;
 using src.Scripts.Marks;
@@ -40,7 +41,7 @@ namespace src.Scripts.Systems
             var playerEntity = _world.NewEntity();
             _movePointPool.Add(playerEntity);
             _moveStatePool.Add(playerEntity);
-            _memoryPool.Add(playerEntity);
+            ref var memoryComponent = ref _memoryPool.Add(playerEntity);
             _herbivorePool.Add(playerEntity);
             ref var creatureHealthComponent = ref _creatureHealthPool.Add(playerEntity);
             ref var creatureStaminaComponent = ref _creatureStaminaPool.Add(playerEntity);
@@ -49,7 +50,8 @@ namespace src.Scripts.Systems
             ref var satietyComponent = ref _satietyPool.Add(playerEntity);
             ref var fractionComponent = ref _fractionPool.Add(playerEntity);
             ref var visionComponent = ref _visionPool.Add(playerEntity);
-            
+
+            memoryComponent.detectedEntities = new List<EntityHandler>();
             creatureHealthComponent.MaxValue = _gameData.playerData.MaxHealth;
             creatureStaminaComponent.MaxValue = _gameData.playerData.MaxStamina;
             satietyComponent.MaxValue = _gameData.playerData.MaxSatiety;
