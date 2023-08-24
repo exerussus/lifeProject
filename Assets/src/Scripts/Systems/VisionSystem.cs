@@ -55,7 +55,8 @@ namespace src.Scripts.Systems
 
         private void CastRay(Vector2 direction, Vector3 position, float rangeSight, MemoryComponent memoryComponent)
         {
-        
+
+            position = new Vector3(position.x + direction.x/2, position.y + direction.y/2, 0);
             RaycastHit2D hit = Physics2D.Raycast(position, direction, rangeSight);
 
             if(hit.collider != null)

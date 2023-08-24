@@ -15,9 +15,9 @@ MonoBehaviour:
   prefab: {fileID: 2475360618694672561, guid: 74ba81d26020c684b8bf495ac7231092, type: 3}
   moveSpeed: 3
   maxSatiety: 5
-  creatureType: 0
+  creatureType: 1
   maxHealth: 3
   maxStamina: 6
   fraction: 0
-  rangeOfSight: 0
-  lineOfSight: 0
+  rangeOfSight: 5
+  lineOfSight: 99
