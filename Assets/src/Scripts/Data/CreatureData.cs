@@ -14,6 +14,8 @@ namespace src.Scripts.Data
         [SerializeField] private float maxHealth;
         [SerializeField] private float maxStamina;
         [SerializeField] private int fraction;
+        [SerializeField] private float rangeOfSight;
+        [SerializeField] private float lineOfSight;
 
         public GameObject Prefab => prefab;
         public float MoveSpeed => moveSpeed;
@@ -22,5 +24,7 @@ namespace src.Scripts.Data
         public float MaxHealth => maxHealth;
         public float MaxStamina => maxStamina;
         public int Fraction => fraction;
+        public float RangeOfSight => rangeOfSight;
+        public float LineOfSight => lineOfSight;
     }
 }

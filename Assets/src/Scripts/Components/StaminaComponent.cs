@@ -5,7 +5,7 @@ using UnityEngine;
 namespace src.Scripts.Components
 {
     [Serializable]
-    public struct SatietyComponent
+    public struct StaminaComponent
     {
         [SerializeField] private float _maxValue;
         [SerializeField] private float _value;

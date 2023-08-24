@@ -5,9 +5,8 @@ using UnityEngine;
 namespace src.Scripts.Components
 {
     [Serializable]
-    public struct MoveStateComponent
+    public struct MoveDirectionComponent
     {
-        public bool required;
         public Vector2 direction;
     }
 }

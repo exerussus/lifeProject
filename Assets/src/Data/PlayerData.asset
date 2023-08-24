@@ -17,5 +17,7 @@ MonoBehaviour:
   maxSatiety: 2
   creatureType: 0
   maxHealth: 3
-  maxStamina: 5
+  maxStamina: 6
   fraction: 0
+  rangeOfSight: 0
+  lineOfSight: 0

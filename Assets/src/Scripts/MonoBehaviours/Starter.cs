@@ -1,5 +1,7 @@
 
+using System;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.UnityEditor;
 using src.Scripts.Data;
 using src.Scripts.Systems;
 using UnityEngine;
@@ -14,6 +16,10 @@ namespace src.Scripts.MonoBehaviours
         private IEcsSystems _fixedUpdateSystems;
         [SerializeField] private GameData gameData;
         
+#if UNITY_EDITOR
+        IEcsSystems _editorSystems;
+#endif
+
         private void Start() 
         {        
             _world = new EcsWorld();
@@ -26,6 +32,10 @@ namespace src.Scripts.MonoBehaviours
         private void Update() 
         {
             _updateSystems?.Run();
+#if UNITY_EDITOR
+            // Выполняем обновление состояния отладочных систем. 
+            _editorSystems?.Run ();
+#endif
         }
 
         private void FixedUpdate()
@@ -36,7 +46,16 @@ namespace src.Scripts.MonoBehaviours
         private void PrepareInitSystems()
         {
             _initSystems = new EcsSystems(_world, gameData);
+#if UNITY_EDITOR
+            _editorSystems = new EcsSystems (_initSystems.GetWorld ());
+            _editorSystems
+                .Add (new EcsWorldDebugSystem ())
+                .Init ();
+#endif
             _initSystems.Add(new CreatingPlayerSystem());
+#if UNITY_EDITOR
+            _initSystems.Add(new EcsWorldDebugSystem());
+#endif
             _initSystems.Init();
         }
         
@@ -50,14 +69,18 @@ namespace src.Scripts.MonoBehaviours
         {
             _fixedUpdateSystems = new EcsSystems(_world, gameData);
             _fixedUpdateSystems
-                
                 .Add(new  MovementSystem());
-            
             _fixedUpdateSystems.Init();
         }
         
         private void OnDestroy() 
         {
+#if UNITY_EDITOR
+            if (_editorSystems != null) {
+                _editorSystems.Destroy ();
+                _editorSystems = null;
+            }
+#endif
             _initSystems.Destroy();
         }
     }

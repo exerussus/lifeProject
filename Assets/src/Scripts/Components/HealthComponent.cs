@@ -1,18 +1,14 @@
-﻿using System;
+﻿
+using System;
+using UnityEngine;
 
-namespace src.Scripts.Logic
+namespace src.Scripts.Components
 {
     [Serializable]
-    public class CreatureResource
+    public struct HealthComponent
     {
-        public CreatureResource(float maxValue)
-        {
-            _maxValue = maxValue;
-            _value = maxValue;
-        }
-        
-        private float _maxValue;
-        private float _value;
+        [SerializeField] private float _maxValue;
+        [SerializeField] private float _value;
         
         public float NormalizedValue => _value / _maxValue;
 

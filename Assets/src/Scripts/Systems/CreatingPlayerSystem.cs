@@ -1,29 +1,33 @@
 ﻿using Leopotam.EcsLite;
 using src.Scripts.Abstraction;
 using src.Scripts.Components;
-using src.Scripts.Logic;
+using src.Scripts.Marks;
+using src.Scripts.MonoBehaviours;
 using UnityEngine;
 
 namespace src.Scripts.Systems
 {
     public class CreatingPlayerSystem : EcsInit
     {
-        private EcsPool<CreatureTypeComponent> _creatureTypePool;
-        private EcsPool<CreatureResourceComponent> _creatureResourcePool;
+        private EcsPool<HerbivoreMark> _herbivorePool;
+        private EcsPool<HealthComponent> _creatureHealthPool;
+        private EcsPool<StaminaComponent> _creatureStaminaPool;
         private EcsPool<MovePointComponent> _movePointPool;
         private EcsPool<MoveSpeedComponent> _moveSpeedPool;
-        private EcsPool<MoveStateComponent> _moveStatePool;
+        private EcsPool<MoveDirectionComponent> _moveStatePool;
         private EcsPool<TransformComponent> _transformPool;
         private EcsPool<SatietyComponent> _satietyPool;
         private EcsPool<FractionComponent> _fractionPool;
+        private EcsPool<VisionComponent> _visionPool;
+        private EcsPool<MemoryComponent> _memoryPool;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
-            return _world.Filter<CreatureTypeComponent>().
-                Inc<CreatureResourceComponent>().
+            return _world.Filter<HerbivoreMark>().
+                Inc<HealthComponent>().
                 Inc<MovePointComponent>().
                 Inc<MoveSpeedComponent>().
-                Inc<MoveStateComponent>().
+                Inc<MoveDirectionComponent>().
                 Inc<TransformComponent>().
                 Inc<SatietyComponent>().
                 Inc<FractionComponent>().End();
@@ -36,35 +40,44 @@ namespace src.Scripts.Systems
             var playerEntity = _world.NewEntity();
             _movePointPool.Add(playerEntity);
             _moveStatePool.Add(playerEntity);
-            ref var creatureTypeComponent = ref _creatureTypePool.Add(playerEntity);
-            ref var creatureResourceComponent = ref _creatureResourcePool.Add(playerEntity);
+            _memoryPool.Add(playerEntity);
+            _herbivorePool.Add(playerEntity);
+            ref var creatureHealthComponent = ref _creatureHealthPool.Add(playerEntity);
+            ref var creatureStaminaComponent = ref _creatureStaminaPool.Add(playerEntity);
             ref var moveSpeedComponent = ref _moveSpeedPool.Add(playerEntity);
             ref var transformComponent = ref _transformPool.Add(playerEntity);
             ref var satietyComponent = ref _satietyPool.Add(playerEntity);
             ref var fractionComponent = ref _fractionPool.Add(playerEntity);
-
-            creatureTypeComponent.creatureType = _gameData.playerData.CreatureType;
-            creatureResourceComponent.health = new CreatureResource(_gameData.playerData.MaxHealth);
-            creatureResourceComponent.stamina = new CreatureResource(_gameData.playerData.MaxStamina);
-            satietyComponent.satiety = new CreatureResource(_gameData.playerData.MaxSatiety);
+            ref var visionComponent = ref _visionPool.Add(playerEntity);
+            
+            creatureHealthComponent.MaxValue = _gameData.playerData.MaxHealth;
+            creatureStaminaComponent.MaxValue = _gameData.playerData.MaxStamina;
+            satietyComponent.MaxValue = _gameData.playerData.MaxSatiety;
             moveSpeedComponent.value = _gameData.playerData.MoveSpeed;
             fractionComponent.value = _gameData.playerData.Fraction;
+            visionComponent.rangeSight = _gameData.playerData.RangeOfSight;
+            visionComponent.lineSight = _gameData.playerData.LineOfSight;
             
             var createdGameObject = Object.Instantiate(_gameData.playerData.Prefab);
-
+            var entityHandler = createdGameObject.AddComponent<EntityHandler>();
+            
+            entityHandler.Init(playerEntity);
             transformComponent.transform = createdGameObject.transform;
         }
         
         private void PreparePools()
         {
-            _creatureTypePool = _world.GetPool<CreatureTypeComponent>();
-            _creatureResourcePool = _world.GetPool<CreatureResourceComponent>();
+            _herbivorePool = _world.GetPool<HerbivoreMark>();
+            _creatureHealthPool = _world.GetPool<HealthComponent>();
+            _creatureStaminaPool = _world.GetPool<StaminaComponent>();
             _movePointPool = _world.GetPool<MovePointComponent>();
             _moveSpeedPool = _world.GetPool<MoveSpeedComponent>();
-            _moveStatePool = _world.GetPool<MoveStateComponent>();
+            _moveStatePool = _world.GetPool<MoveDirectionComponent>();
             _transformPool = _world.GetPool<TransformComponent>();
             _satietyPool = _world.GetPool<SatietyComponent>();
             _fractionPool = _world.GetPool<FractionComponent>();
+            _visionPool = _world.GetPool<VisionComponent>();
+            _memoryPool = _world.GetPool<MemoryComponent>();
         }
     }   
 }

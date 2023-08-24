@@ -23,11 +23,6 @@ namespace src.Scripts.Abstraction
             return _world.GetPool<T>();
         }
 
-        protected GameData GetGameData(IEcsSystems systems)
-        {
-            return systems.GetShared<GameData>();
-        }
-
         protected abstract EcsFilter GetFilter(IEcsSystems systems, EcsWorld world);
         protected abstract void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter);
     }
