@@ -5,7 +5,7 @@ using src.Scripts.Marks;
 
 namespace src.Scripts.Systems
 {
-    public class HerbivoreHungerBehaviourSystem : EcsRunForeach
+    public class HerbivoreHungerBehaviourSystem : EcsMarkUpdater
     {
         private EcsPool<SatietyComponent> _satietyPool;
         private EcsPool<HarvestingMark> _harvestingPool;
@@ -23,17 +23,13 @@ namespace src.Scripts.Systems
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
         {
-            ref var satietyComponent = ref _satietyPool.Get(entity);
-            var harvestingComponent = _harvestingPool.Has(entity);
-            if (satietyComponent.NormalizedValue < 0.6f)
-            {
-                if (!harvestingComponent) _harvestingPool.Add(entity);
-            }
-            else
-            {
-                if (harvestingComponent) _harvestingPool.Del(entity);
-            }
+            UpdateMark(_harvestingPool, entity);
         }
 
+        protected override bool MarkCondition(int entity)
+        {
+            ref var satietyComponent = ref _satietyPool.Get(entity);
+            return satietyComponent.NormalizedValue < 0.6f;
+        }
     }
 }
