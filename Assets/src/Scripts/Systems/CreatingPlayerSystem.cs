@@ -9,17 +9,17 @@ namespace src.Scripts.Systems
 {
     public class CreatingPlayerSystem : EcsInit
     {
-        private EcsPool<HerbivoreMark> _herbivorePool;
-        private EcsPool<HealthComponent> _creatureHealthPool;
-        private EcsPool<StaminaComponent> _creatureStaminaPool;
-        private EcsPool<MovePointComponent> _movePointPool;
-        private EcsPool<MoveSpeedComponent> _moveSpeedPool;
-        private EcsPool<MoveDirectionComponent> _moveStatePool;
-        private EcsPool<TransformComponent> _transformPool;
-        private EcsPool<SatietyComponent> _satietyPool;
-        private EcsPool<FractionComponent> _fractionPool;
-        private EcsPool<VisionComponent> _visionPool;
-        private EcsPool<MemoryComponent> _memoryPool;
+        private EcsPool<HerbivoreMark> _herbivorePool = null;
+        private EcsPool<HealthComponent> _creatureHealthPool = null;
+        private EcsPool<StaminaComponent> _creatureStaminaPool = null;
+        private EcsPool<MovePointComponent> _movePointPool = null;
+        private EcsPool<MoveSpeedComponent> _moveSpeedPool = null;
+        private EcsPool<MoveDirectionComponent> _moveStatePool = null;
+        private EcsPool<TransformComponent> _transformPool = null;
+        private EcsPool<SatietyComponent> _satietyPool = null;
+        private EcsPool<FractionComponent> _fractionPool = null;
+        private EcsPool<VisionComponent> _visionPool = null;
+        private EcsPool<MemoryComponent> _memoryPool = null;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
