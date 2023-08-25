@@ -1,4 +1,5 @@
 ﻿using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using src.Scripts.Abstraction;
 using src.Scripts.Components;
 using src.Scripts.Marks;
@@ -8,34 +9,26 @@ namespace src.Scripts.Systems
 {
     public class MovementCreatureBehaviourSystem : EcsRunForeach
     {
-        private EcsPool<PreyComponent> _preyPool;
-        private EcsPool<WorringComponent> _worringPool;
-        private EcsPool<HuntingMark> _huntingPool;
-        private EcsPool<HarvestingMark> _harvestingPool;
-        private EcsPool<TransformComponent> _transformPool;
-        private EcsPool<MovePointComponent> _movePointPool;
+        private readonly EcsPoolInject<PreyComponent> _preyPool = default;
+        private readonly EcsPoolInject<WorringComponent> _worringPool = default;
+        private readonly EcsPoolInject<HuntingMark> _huntingPool = default;
+        private readonly EcsPoolInject<HarvestingMark> _harvestingPool = default;
+        private readonly EcsPoolInject<TransformComponent> _transformPool = default;
+        private readonly EcsPoolInject<MovePointComponent> _movePointPool = default;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
             return _world.Filter<CreatureMark>().Exc<VegetationMark>().End();
         }
 
-        protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
-        {
-            _preyPool = _world.GetPool<PreyComponent>();
-            _worringPool = _world.GetPool<WorringComponent>();
-            _huntingPool = _world.GetPool<HuntingMark>();
-            _harvestingPool = _world.GetPool<HarvestingMark>();
-            _transformPool = _world.GetPool<TransformComponent>();
-            _movePointPool = _world.GetPool<MovePointComponent>();
-        }
+        protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter) {}
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
         {
-            var hasPrey = _preyPool.Has(entity);
-            var hasWorring = _worringPool.Has(entity);
-            var hasHunting = _huntingPool.Has(entity);
-            var hasHarvesting = _harvestingPool.Has(entity);
+            var hasPrey = _preyPool.Value.Has(entity);
+            var hasWorring = _worringPool.Value.Has(entity);
+            var hasHunting = _huntingPool.Value.Has(entity);
+            var hasHarvesting = _harvestingPool.Value.Has(entity);
 
             if (hasWorring) RunForestRun(entity);
             else if (hasPrey) RunToPrey(entity);
@@ -46,10 +39,10 @@ namespace src.Scripts.Systems
 
         private void RunForestRun(int entity)
         {
-            ref var worringComponent = ref _worringPool.Get(entity);
-            ref var movePointComponent = ref _movePointPool.Get(entity);
-            ref var transformEnemyComponent = ref _transformPool.Get(worringComponent.entity);
-            ref var transformCreatureComponent = ref _transformPool.Get(entity);
+            ref var worringComponent = ref _worringPool.Value.Get(entity);
+            ref var movePointComponent = ref _movePointPool.Value.Get(entity);
+            ref var transformEnemyComponent = ref _transformPool.Value.Get(worringComponent.entity);
+            ref var transformCreatureComponent = ref _transformPool.Value.Get(entity);
             
             var direction = transformCreatureComponent.transform.position - transformEnemyComponent.transform.position;
             movePointComponent.destination = -direction.normalized * 5f;
@@ -57,16 +50,16 @@ namespace src.Scripts.Systems
 
         private void RunToPrey(int entity)
         {
-            ref var preyComponent = ref _preyPool.Get(entity);
-            ref var movePointComponent = ref _movePointPool.Get(entity);
-            ref var transformPreyComponent = ref _transformPool.Get(preyComponent.entity);
+            ref var preyComponent = ref _preyPool.Value.Get(entity);
+            ref var movePointComponent = ref _movePointPool.Value.Get(entity);
+            ref var transformPreyComponent = ref _transformPool.Value.Get(preyComponent.entity);
             movePointComponent.destination = transformPreyComponent.transform.position;
         }
 
         private void LookAround(int entity)
         {
-            ref var transformCreatureComponent = ref _transformPool.Get(entity);
-            ref var movePointComponent = ref _movePointPool.Get(entity);
+            ref var transformCreatureComponent = ref _transformPool.Value.Get(entity);
+            ref var movePointComponent = ref _movePointPool.Value.Get(entity);
 
             var dir = transformCreatureComponent.transform.up * 10f;
             movePointComponent.destination = new Vector3(dir.x, dir.y + Random.Range(-1f, 1f), 0);
@@ -78,8 +71,8 @@ namespace src.Scripts.Systems
 
             if (randomFloat < 7f) return;
             
-            ref var transformCreatureComponent = ref _transformPool.Get(entity);
-            ref var movePointComponent = ref _movePointPool.Get(entity);
+            ref var transformCreatureComponent = ref _transformPool.Value.Get(entity);
+            ref var movePointComponent = ref _movePointPool.Value.Get(entity);
             
             var dir = transformCreatureComponent.transform.up;
             movePointComponent.destination = new Vector3(dir.x, dir.y + Random.Range(-1f, 1f), 0);

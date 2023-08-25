@@ -1,4 +1,5 @@
 ﻿using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using src.Scripts.Abstraction;
 using src.Scripts.Components;
 using src.Scripts.MonoBehaviours;
@@ -8,9 +9,9 @@ namespace src.Scripts.Systems
 {
     public class VisionSystem : EcsRunForeach
     {
-        private EcsPool<VisionComponent> _visionPool;
-        private EcsPool<TransformComponent> _transformPool;
-        private EcsPool<MemoryComponent> _memoryPool;
+        private readonly EcsPoolInject<VisionComponent> _visionPool = default;
+        private readonly EcsPoolInject<TransformComponent> _transformPool = default;
+        private readonly EcsPoolInject<MemoryComponent> _memoryPool = default;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
@@ -19,16 +20,13 @@ namespace src.Scripts.Systems
 
         protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
         {
-            _visionPool = GetPool<VisionComponent>();
-            _transformPool = GetPool<TransformComponent>();
-            _memoryPool = GetPool<MemoryComponent>();
         }
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
         {
-            ref var visionComponent = ref _visionPool.Get(entity);
-            ref var transformComponent = ref _transformPool.Get(entity);
-            ref var memoryComponent = ref _memoryPool.Get(entity);
+            ref var visionComponent = ref _visionPool.Value.Get(entity);
+            ref var transformComponent = ref _transformPool.Value.Get(entity);
+            ref var memoryComponent = ref _memoryPool.Value.Get(entity);
             var lineSight = visionComponent.lineSight;
             var rangeSight = visionComponent.rangeSight;
             const int rayCount = 5;

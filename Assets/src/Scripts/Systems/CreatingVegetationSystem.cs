@@ -1,4 +1,5 @@
 ﻿using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using src.Scripts.Abstraction;
 using src.Scripts.Components;
 using src.Scripts.Marks;
@@ -9,10 +10,10 @@ namespace src.Scripts.Systems
 {
     public class CreatingVegetationSystem : EcsInit
     {
-        private EcsPool<VegetationMark> _vegetationPool;
-        private EcsPool<TransformComponent> _transformPool;
-        private EcsPool<CreatureMark> _creaturePool;
-        private EcsPool<FractionComponent> _fractionPool;
+        private readonly EcsPoolInject<VegetationMark> _vegetationPool;
+        private readonly EcsPoolInject<TransformComponent> _transformPool;
+        private readonly EcsPoolInject<CreatureMark> _creaturePool;
+        private readonly EcsPoolInject<FractionComponent> _fractionPool;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
@@ -21,17 +22,12 @@ namespace src.Scripts.Systems
 
         protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
         {
-            _vegetationPool = _world.GetPool<VegetationMark>();
-            _transformPool = _world.GetPool<TransformComponent>();
-            _creaturePool = _world.GetPool<CreatureMark>();
-            _fractionPool = _world.GetPool<FractionComponent>();
-            
             var newEntity = _world.NewEntity();
             
-            _creaturePool.Add(newEntity);
-            _vegetationPool.Add(newEntity);
-            ref var transformComponent = ref _transformPool.Add(newEntity);
-            ref var fractionComponent = ref _fractionPool.Add(newEntity);
+            _creaturePool.Value.Add(newEntity);
+            _vegetationPool.Value.Add(newEntity);
+            ref var transformComponent = ref _transformPool.Value.Add(newEntity);
+            ref var fractionComponent = ref _fractionPool.Value.Add(newEntity);
             var createdGameObject = Object.Instantiate(_gameData.plaintData.Prefab);
             var entityHandler = createdGameObject.AddComponent<EntityHandler>();
             entityHandler.Init(newEntity);

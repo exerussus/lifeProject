@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using src.Scripts.Abstraction;
 using src.Scripts.Components;
 using src.Scripts.Marks;
@@ -10,20 +11,20 @@ namespace src.Scripts.Systems
 {
     public class CreatingPlayerSystem : EcsInit
     {
-        private EcsPool<HerbivoreMark> _herbivorePool = null;
-        private EcsPool<HealthComponent> _creatureHealthPool = null;
-        private EcsPool<StaminaComponent> _creatureStaminaPool = null;
-        private EcsPool<MovePointComponent> _movePointPool = null;
-        private EcsPool<MoveSpeedComponent> _moveSpeedPool = null;
-        private EcsPool<MoveDirectionComponent> _moveStatePool = null;
-        private EcsPool<TransformComponent> _transformPool = null;
-        private EcsPool<SatietyComponent> _satietyPool = null;
-        private EcsPool<FractionComponent> _fractionPool = null;
-        private EcsPool<VisionComponent> _visionPool = null;
-        private EcsPool<MemoryComponent> _memoryPool = null;
-        private EcsPool<RotationSpeedComponent> _rotationSpeedPool;
-        private EcsPool<PlayerMark> _playerPool;
-        private EcsPool<CreatureMark> _creaturePool;
+        private readonly EcsPoolInject<HerbivoreMark> _herbivorePool = default;
+        private readonly EcsPoolInject<HealthComponent> _creatureHealthPool = default;
+        private readonly EcsPoolInject<StaminaComponent> _creatureStaminaPool = default;
+        private readonly EcsPoolInject<MovePointComponent> _movePointPool = default;
+        private readonly EcsPoolInject<MoveSpeedComponent> _moveSpeedPool = default;
+        private readonly EcsPoolInject<MoveDirectionComponent> _moveStatePool = default;
+        private readonly EcsPoolInject<TransformComponent> _transformPool = default;
+        private readonly EcsPoolInject<SatietyComponent> _satietyPool = default;
+        private readonly EcsPoolInject<FractionComponent> _fractionPool = default;
+        private readonly EcsPoolInject<VisionComponent> _visionPool = default;
+        private readonly EcsPoolInject<MemoryComponent> _memoryPool = default;
+        private readonly EcsPoolInject<RotationSpeedComponent> _rotationSpeedPool = default;
+        private readonly EcsPoolInject<PlayerMark> _playerPool = default;
+        private readonly EcsPoolInject<CreatureMark> _creaturePool = default;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
@@ -39,23 +40,21 @@ namespace src.Scripts.Systems
 
         protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
         {
-            PreparePools();
-            
             var playerEntity = _world.NewEntity();
-            _movePointPool.Add(playerEntity);
-            _moveStatePool.Add(playerEntity);
-            _playerPool.Add(playerEntity);
-            _creaturePool.Add(playerEntity);
-            _herbivorePool.Add(playerEntity);
-            ref var memoryComponent = ref _memoryPool.Add(playerEntity);
-            ref var creatureHealthComponent = ref _creatureHealthPool.Add(playerEntity);
-            ref var creatureStaminaComponent = ref _creatureStaminaPool.Add(playerEntity);
-            ref var moveSpeedComponent = ref _moveSpeedPool.Add(playerEntity);
-            ref var transformComponent = ref _transformPool.Add(playerEntity);
-            ref var satietyComponent = ref _satietyPool.Add(playerEntity);
-            ref var fractionComponent = ref _fractionPool.Add(playerEntity);
-            ref var visionComponent = ref _visionPool.Add(playerEntity);
-            ref var rotationSpeedComponent = ref _rotationSpeedPool.Add(playerEntity);
+            _movePointPool.Value.Add(playerEntity);
+            _moveStatePool.Value.Add(playerEntity);
+            _playerPool.Value.Add(playerEntity);
+            _creaturePool.Value.Add(playerEntity);
+            _herbivorePool.Value.Add(playerEntity);
+            ref var memoryComponent = ref _memoryPool.Value.Add(playerEntity);
+            ref var creatureHealthComponent = ref _creatureHealthPool.Value.Add(playerEntity);
+            ref var creatureStaminaComponent = ref _creatureStaminaPool.Value.Add(playerEntity);
+            ref var moveSpeedComponent = ref _moveSpeedPool.Value.Add(playerEntity);
+            ref var transformComponent = ref _transformPool.Value.Add(playerEntity);
+            ref var satietyComponent = ref _satietyPool.Value.Add(playerEntity);
+            ref var fractionComponent = ref _fractionPool.Value.Add(playerEntity);
+            ref var visionComponent = ref _visionPool.Value.Add(playerEntity);
+            ref var rotationSpeedComponent = ref _rotationSpeedPool.Value.Add(playerEntity);
 
             rotationSpeedComponent.value = _gameData.playerData.RotationSpeed;
             memoryComponent.detectedEntities = new List<EntityHandler>();
@@ -72,24 +71,6 @@ namespace src.Scripts.Systems
             
             entityHandler.Init(playerEntity);
             transformComponent.transform = createdGameObject.transform;
-        }
-        
-        private void PreparePools()
-        {
-            _herbivorePool = _world.GetPool<HerbivoreMark>();
-            _creatureHealthPool = _world.GetPool<HealthComponent>();
-            _creatureStaminaPool = _world.GetPool<StaminaComponent>();
-            _movePointPool = _world.GetPool<MovePointComponent>();
-            _moveSpeedPool = _world.GetPool<MoveSpeedComponent>();
-            _moveStatePool = _world.GetPool<MoveDirectionComponent>();
-            _transformPool = _world.GetPool<TransformComponent>();
-            _satietyPool = _world.GetPool<SatietyComponent>();
-            _fractionPool = _world.GetPool<FractionComponent>();
-            _visionPool = _world.GetPool<VisionComponent>();
-            _memoryPool = _world.GetPool<MemoryComponent>();
-            _rotationSpeedPool = _world.GetPool<RotationSpeedComponent>();
-            _playerPool = _world.GetPool<PlayerMark>();
-            _creaturePool = _world.GetPool<CreatureMark>();
         }
     }   
 }

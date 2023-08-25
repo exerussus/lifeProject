@@ -23,10 +23,7 @@ namespace src.Scripts.Systems
                 Exc<ImmovableMark>().End();
         }
 
-        protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
-        {
-
-        }
+        protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter) {}
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
         {
