@@ -9,6 +9,7 @@ namespace src.Scripts.Data
     {
         [SerializeField] private GameObject prefab;
         [SerializeField] private float moveSpeed;
+        [Range(50f, 200f)][SerializeField] private float rotationSpeed;
         [SerializeField] private int maxSatiety;
         [SerializeField] private CreatureType creatureType;
         [SerializeField] private float maxHealth;
@@ -19,6 +20,7 @@ namespace src.Scripts.Data
 
         public GameObject Prefab => prefab;
         public float MoveSpeed => moveSpeed;
+        public float RotationSpeed => rotationSpeed;
         public int MaxSatiety => maxSatiety;
         public CreatureType CreatureType => creatureType;
         public float MaxHealth => maxHealth;

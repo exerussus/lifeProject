@@ -21,6 +21,8 @@ namespace src.Scripts.Systems
         private EcsPool<FractionComponent> _fractionPool = null;
         private EcsPool<VisionComponent> _visionPool = null;
         private EcsPool<MemoryComponent> _memoryPool = null;
+        private EcsPool<RotationSpeedComponent> _rotationSpeedPool;
+        private EcsPool<PlayerMark> _playerPool;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
@@ -41,6 +43,7 @@ namespace src.Scripts.Systems
             var playerEntity = _world.NewEntity();
             _movePointPool.Add(playerEntity);
             _moveStatePool.Add(playerEntity);
+            _playerPool.Add(playerEntity);
             ref var memoryComponent = ref _memoryPool.Add(playerEntity);
             _herbivorePool.Add(playerEntity);
             ref var creatureHealthComponent = ref _creatureHealthPool.Add(playerEntity);
@@ -50,7 +53,9 @@ namespace src.Scripts.Systems
             ref var satietyComponent = ref _satietyPool.Add(playerEntity);
             ref var fractionComponent = ref _fractionPool.Add(playerEntity);
             ref var visionComponent = ref _visionPool.Add(playerEntity);
+            ref var rotationSpeedComponent = ref _rotationSpeedPool.Add(playerEntity);
 
+            rotationSpeedComponent.value = _gameData.playerData.RotationSpeed;
             memoryComponent.detectedEntities = new List<EntityHandler>();
             creatureHealthComponent.MaxValue = _gameData.playerData.MaxHealth;
             creatureStaminaComponent.MaxValue = _gameData.playerData.MaxStamina;
@@ -80,6 +85,8 @@ namespace src.Scripts.Systems
             _fractionPool = _world.GetPool<FractionComponent>();
             _visionPool = _world.GetPool<VisionComponent>();
             _memoryPool = _world.GetPool<MemoryComponent>();
+            _rotationSpeedPool = _world.GetPool<RotationSpeedComponent>();
+            _playerPool = _world.GetPool<PlayerMark>();
         }
     }   
 }
