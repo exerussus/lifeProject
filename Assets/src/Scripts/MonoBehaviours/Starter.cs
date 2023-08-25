@@ -1,6 +1,7 @@
 
 using System;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.Di;
 using Leopotam.EcsLite.UnityEditor;
 using src.Scripts.Data;
 using src.Scripts.Systems;
@@ -50,18 +51,24 @@ namespace src.Scripts.MonoBehaviours
             _editorSystems = new EcsSystems (_initSystems.GetWorld ());
             _editorSystems
                 .Add (new EcsWorldDebugSystem ())
+                .Inject()
                 .Init ();
 #endif
             _initSystems.Add(new CreatingPlayerSystem());
+            _initSystems.Add(new CreatingVegetationSystem());
 #if UNITY_EDITOR
-            _initSystems.Add(new EcsWorldDebugSystem());
+            _initSystems.Add(new EcsWorldDebugSystem())
 #endif
+                .Inject();
             _initSystems.Init();
         }
         
         private void PrepareUpdateSystems()
         {
-            _updateSystems = new EcsSystems(_world, gameData);
+            _updateSystems = new EcsSystems(_world, gameData)
+                .Inject()
+                // .Add(new MoveToMouseSystem())
+                ;
             _updateSystems.Init();
         }
         
@@ -69,11 +76,13 @@ namespace src.Scripts.MonoBehaviours
         {
             _fixedUpdateSystems = new EcsSystems(_world, gameData);
             _fixedUpdateSystems
-                .Add(new MoveToMouseSystem())
                 .Add(new MovementSystem())
                 .Add(new HerbivoreHungerBehaviourSystem())
+                .Add(new VisionSystem())
                 .Add(new DeterminantSystem())
-                .Add(new VisionSystem());
+                .Add(new PreySystem())
+                .Add(new MovementCreatureBehaviourSystem())
+                .Inject();
             _fixedUpdateSystems.Init();
         }
         

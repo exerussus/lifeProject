@@ -64,6 +64,7 @@ namespace src.Scripts.Systems
                 var detectedGameObject = hit.collider.gameObject;
                 var entityHandler = detectedGameObject.GetComponent<EntityHandler>();
                 if (entityHandler != null) memoryComponent.detectedEntities.Add(entityHandler);
+                
                 Debug.DrawLine(position, hit.point, Color.green);
             }
             else

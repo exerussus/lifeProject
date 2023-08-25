@@ -6,5 +6,6 @@ namespace src.Scripts.Data
     public class GameData : ScriptableObject
     {
         public CreatureData playerData;
+        public CreatureData plaintData;
     }
 }

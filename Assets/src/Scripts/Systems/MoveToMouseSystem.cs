@@ -22,6 +22,7 @@ namespace src.Scripts.Systems
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
         {
+            if (!Input.GetMouseButtonDown(0)) return;
             ref var movePointComponent = ref _movePointPool.Get(entity);
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             var destination = mousePosition;

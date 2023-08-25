@@ -23,6 +23,7 @@ namespace src.Scripts.Systems
         private EcsPool<MemoryComponent> _memoryPool = null;
         private EcsPool<RotationSpeedComponent> _rotationSpeedPool;
         private EcsPool<PlayerMark> _playerPool;
+        private EcsPool<CreatureMark> _creaturePool;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
@@ -44,8 +45,9 @@ namespace src.Scripts.Systems
             _movePointPool.Add(playerEntity);
             _moveStatePool.Add(playerEntity);
             _playerPool.Add(playerEntity);
-            ref var memoryComponent = ref _memoryPool.Add(playerEntity);
+            _creaturePool.Add(playerEntity);
             _herbivorePool.Add(playerEntity);
+            ref var memoryComponent = ref _memoryPool.Add(playerEntity);
             ref var creatureHealthComponent = ref _creatureHealthPool.Add(playerEntity);
             ref var creatureStaminaComponent = ref _creatureStaminaPool.Add(playerEntity);
             ref var moveSpeedComponent = ref _moveSpeedPool.Add(playerEntity);
@@ -87,6 +89,7 @@ namespace src.Scripts.Systems
             _memoryPool = _world.GetPool<MemoryComponent>();
             _rotationSpeedPool = _world.GetPool<RotationSpeedComponent>();
             _playerPool = _world.GetPool<PlayerMark>();
+            _creaturePool = _world.GetPool<CreatureMark>();
         }
     }   
 }

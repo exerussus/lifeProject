@@ -5,35 +5,35 @@ using src.Scripts.Marks;
 
 namespace src.Scripts.Systems
 {
-    public class HerbivoreHungerBehaviourSystem : EcsMarkUpdater
+    public class PreySystem : EcsRunForeach
     {
-        private EcsPool<SatietyComponent> _satietyPool;
+        private EcsPool<PreyComponent> _preyPool;
+        private EcsPool<HuntingMark> _huntingPool;
         private EcsPool<HarvestingMark> _harvestingPool;
-        private EcsPool<HerbivoreMark> _herbivorePool;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
-            return world.Filter<HerbivoreMark>().End();
+            return _world.Filter<PreyComponent>().End();
         }
 
         protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
         {
-            _satietyPool = _world.GetPool<SatietyComponent>();
+            _preyPool = _world.GetPool<PreyComponent>();
+            _huntingPool = _world.GetPool<HuntingMark>();
             _harvestingPool = _world.GetPool<HarvestingMark>();
-            _herbivorePool = _world.GetPool<HerbivoreMark>();
         }
 
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
         {
-            UpdateMark(_harvestingPool, entity);
-        }
-
-        protected override bool MarkCondition(int entity)
-        {
             var hasHarvesting = _harvestingPool.Has(entity);
-            ref var satietyComponent = ref _satietyPool.Get(entity);
-            if (hasHarvesting) return satietyComponent.NormalizedValue < 0.9f;
-            else return satietyComponent.NormalizedValue < 0.6f;
+            var hasHunting = _huntingPool.Has(entity);
+            
+            if (!hasHarvesting && !hasHunting)
+            {
+                _preyPool.Del(entity);
+                return;
+            }
+            ref var prey = ref _preyPool.Get(entity);
         }
     }
 }

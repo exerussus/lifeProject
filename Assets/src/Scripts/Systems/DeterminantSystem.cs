@@ -5,6 +5,7 @@ using src.Scripts.Components;
 using src.Scripts.Marks;
 using src.Scripts.MonoBehaviours;
 using src.Scripts.TalentMarks;
+using UnityEngine;
 
 namespace src.Scripts.Systems
 {
@@ -19,6 +20,8 @@ namespace src.Scripts.Systems
         private EcsPool<FractionComponent> _fractionPool;
         private EcsPool<InsightTalent> _insightTalentPool;
         private EcsPool<PredatorMark> _predatorPool;
+        private EcsPool<HarvestingMark> _harvestingPool;
+        private EcsPool<HuntingMark> _huntingPool;
         
         protected override EcsFilter GetFilter(IEcsSystems systems, EcsWorld world)
         {
@@ -36,6 +39,8 @@ namespace src.Scripts.Systems
             _fractionPool = _world.GetPool<FractionComponent>();
             _insightTalentPool = _world.GetPool<InsightTalent>();
             _predatorPool = _world.GetPool<PredatorMark>();
+            _harvestingPool = _world.GetPool<HarvestingMark>();
+            _huntingPool = _world.GetPool<HuntingMark>();
         }
         
         protected override void InForeach(IEcsSystems systems, int entity, EcsWorld world, EcsFilter filter)
@@ -47,34 +52,39 @@ namespace src.Scripts.Systems
                 var enemyEntity = entityHandler.ID;
 
                 var isSameFraction = _fractionPool.Get(entity).value == _fractionPool.Get(enemyEntity).value;
+                var hasVegetationEnemy = _vegetationPool.Has(enemyEntity);
+                var hasHerbivoreCreature = _herbivorePool.Has(entity);
+                var hasHarvesting = _harvestingPool.Has(entity);
                 
-                if (isSameFraction) continue;
+                if (hasHerbivoreCreature && hasHarvesting && hasVegetationEnemy)
+                {
+                    MakeItPrey(entity, enemyEntity);
+                    continue;
+                }
+                if (isSameFraction || hasVegetationEnemy) continue;
                 
                 ref var healthCreatureComponent = ref _healthPool.Get(entity);
                 ref var healthEnemyComponent = ref _healthPool.Get(enemyEntity);
                 var hasPredatorEnemy = _predatorPool.Has(enemyEntity);
                 var hasPredatorCreature = _predatorPool.Has(entity);
-                var hasVegetationEnemy = _vegetationPool.Has(enemyEntity);
-                var hasHerbivoreCreature = _herbivorePool.Has(entity);
                 var hasHerbivoreEnemy = _herbivorePool.Has(enemyEntity);
+                var hasHunting = _huntingPool.Has(entity);
                 
                 if (hasPredatorCreature 
                     && hasPredatorEnemy 
                     && healthCreatureComponent.Value > healthEnemyComponent.Value 
-                    && !hasVegetationEnemy ||
-                    hasPredatorCreature && hasHerbivoreEnemy && !hasVegetationEnemy)
+                    && hasHunting ||
+                    hasPredatorCreature && hasHerbivoreEnemy && hasHunting)
                 {
                     MakeItPrey(entity, enemyEntity);
                 }
-                else if (!hasPredatorCreature && hasPredatorEnemy && !hasVegetationEnemy || 
+                else if (!hasPredatorCreature && hasPredatorEnemy || 
                          !_insightTalentPool.Has(entity) 
                          && hasHerbivoreEnemy
-                         && healthCreatureComponent.Value < healthEnemyComponent.Value
-                         && !hasVegetationEnemy)
+                         && healthCreatureComponent.Value < healthEnemyComponent.Value)
                 {
                     MakeItWorring(entity, enemyEntity);
                 }
-                else if (hasHerbivoreCreature && hasVegetationEnemy) MakeItPrey(entity, enemyEntity);
             }
             
             memoryComponent.detectedEntities = new List<EntityHandler>();
@@ -109,36 +119,3 @@ namespace src.Scripts.Systems
         }
     }
 }
-
-// if (hasPredatorEnemy)
-// {
-//     if (hasPredatorCreature)
-//     {
-//         if (healthCreatureComponent.Value > healthEnemyComponent.Value)
-//         {
-//             MakeItPrey(entity, enemyEntity);
-//         }
-//         else
-//         {
-//             MakeItWorring(entity, enemyEntity);
-//         }
-//     }
-//     else
-//     {
-//         MakeItWorring(entity, enemyEntity);
-//     }
-// }
-// else
-// {
-//     if (hasPredatorCreature)
-//     {
-//         MakeItPrey(entity, enemyEntity);
-//     }
-//     else
-//     {
-//         if (healthCreatureComponent.Value < healthEnemyComponent.Value)
-//         {
-//             MakeItWorring(entity, enemyEntity);
-//         }
-//     }
-// }
