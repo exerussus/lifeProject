@@ -50,10 +50,11 @@ namespace src.Scripts.Systems
 
         private void RunToPrey(int entity)
         {
+            
             ref var preyComponent = ref _preyPool.Value.Get(entity);
             ref var movePointComponent = ref _movePointPool.Value.Get(entity);
             ref var transformPreyComponent = ref _transformPool.Value.Get(preyComponent.entity);
-            movePointComponent.destination = transformPreyComponent.transform.position;
+            if (transformPreyComponent.transform != null) movePointComponent.destination = transformPreyComponent.transform.position;
         }
 
         private void LookAround(int entity)

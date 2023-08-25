@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 2475360618694672561, guid: 74ba81d26020c684b8bf495ac7231092, type: 3}
   moveSpeed: 3
+  rotationSpeed: 500
   maxSatiety: 5
   creatureType: 1
   maxHealth: 3
   maxStamina: 6
   fraction: 0
-  rangeOfSight: 5
-  lineOfSight: 99
+  rangeOfSight: 2.43
+  lineOfSight: 65.3

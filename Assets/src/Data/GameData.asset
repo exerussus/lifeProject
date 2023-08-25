@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 31f2e0431d4d9ef48a4e3d54426faa11, type: 2}
+  plaintData: {fileID: 11400000, guid: b053e7a8045d13f4290d992e71d650af, type: 2}

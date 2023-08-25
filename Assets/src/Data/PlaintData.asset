@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e57630041456d646b7403a7f9a1ac9a, type: 3}
   m_Name: PlaintData
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  prefab: {fileID: 2524280217392101701, guid: 45f6e92710131df429b9b4d49e072842, type: 3}
   moveSpeed: 0
   rotationSpeed: 0
   maxSatiety: 0
