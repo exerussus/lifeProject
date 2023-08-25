@@ -54,6 +54,7 @@ namespace src.Scripts.MonoBehaviours
                 .Init ();
 #endif
             _initSystems.Add(new CreatingPlayerSystem());
+            _initSystems.Add(new CreatingPredatorSystem());
             _initSystems.Add(new CreatingVegetationSystem());
 #if UNITY_EDITOR
             _initSystems.Add(new EcsWorldDebugSystem())

@@ -40,6 +40,15 @@ namespace src.Scripts.Systems
 
         protected override void Initialization(IEcsSystems systems, EcsWorld world, EcsFilter filter)
         {
+            var creatureCount = 2;
+            for (int i = 0; i < creatureCount; i++)
+            {
+                Create();
+            }
+        }
+
+        private void Create()
+        {
             var playerEntity = _world.NewEntity();
             _movePointPool.Value.Add(playerEntity);
             _moveStatePool.Value.Add(playerEntity);

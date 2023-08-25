@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e57630041456d646b7403a7f9a1ac9a, type: 3}
-  m_Name: PlaintData
+  m_Name: PredatorData
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2524280217392101701, guid: 45f6e92710131df429b9b4d49e072842, type: 3}
-  moveSpeed: 0
-  rotationSpeed: 0
-  maxSatiety: 0
-  creatureType: 0
-  maxHealth: 0
-  maxStamina: 0
-  fraction: 1
-  rangeOfSight: 0
-  lineOfSight: 0
+  prefab: {fileID: 5818401671458351706, guid: e4631c0b8871a6e479e129d42dc73ba7, type: 3}
+  moveSpeed: 2.2
+  rotationSpeed: 500
+  maxSatiety: 7
+  creatureType: 2
+  maxHealth: 8.97
+  maxStamina: 4.69
+  fraction: 2
+  rangeOfSight: 4.01
+  lineOfSight: 43

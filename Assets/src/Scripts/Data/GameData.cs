@@ -7,5 +7,6 @@ namespace src.Scripts.Data
     {
         public CreatureData playerData;
         public CreatureData plaintData;
+        public CreatureData predatorData;
     }
 }

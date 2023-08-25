@@ -50,7 +50,6 @@ namespace src.Scripts.Systems
 
         private void RunToPrey(int entity)
         {
-            
             ref var preyComponent = ref _preyPool.Value.Get(entity);
             ref var movePointComponent = ref _movePointPool.Value.Get(entity);
             ref var transformPreyComponent = ref _transformPool.Value.Get(preyComponent.entity);
@@ -63,7 +62,7 @@ namespace src.Scripts.Systems
             ref var movePointComponent = ref _movePointPool.Value.Get(entity);
 
             var dir = transformCreatureComponent.transform.up * 10f;
-            movePointComponent.destination = new Vector3(dir.x, dir.y + Random.Range(-1f, 1f), 0);
+            movePointComponent.destination = transformCreatureComponent.transform.position + new Vector3(dir.x, dir.y + Random.Range(-2f, 2f), 0);
         }
 
         private void Chill(int entity)

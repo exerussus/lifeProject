@@ -32,7 +32,7 @@ namespace src.Scripts.Systems
             var entityHandler = createdGameObject.AddComponent<EntityHandler>();
             entityHandler.Init(newEntity);
             transformComponent.transform = createdGameObject.transform;
-            fractionComponent.value = 1;
+            fractionComponent.value = _gameData.plaintData.Fraction;
         }
     }
 }
