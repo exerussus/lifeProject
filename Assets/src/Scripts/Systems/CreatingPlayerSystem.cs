@@ -55,7 +55,7 @@ namespace src.Scripts.Systems
             _playerPool.Value.Add(playerEntity);
             _creaturePool.Value.Add(playerEntity);
             _herbivorePool.Value.Add(playerEntity);
-            ref var memoryComponent = ref _memoryPool.Value.Add(playerEntity);
+            _memoryPool.Value.Add(playerEntity);
             ref var creatureHealthComponent = ref _creatureHealthPool.Value.Add(playerEntity);
             ref var creatureStaminaComponent = ref _creatureStaminaPool.Value.Add(playerEntity);
             ref var moveSpeedComponent = ref _moveSpeedPool.Value.Add(playerEntity);
@@ -66,7 +66,6 @@ namespace src.Scripts.Systems
             ref var rotationSpeedComponent = ref _rotationSpeedPool.Value.Add(playerEntity);
 
             rotationSpeedComponent.value = _gameData.playerData.RotationSpeed;
-            memoryComponent.detectedEntities = new List<EntityHandler>();
             creatureHealthComponent.MaxValue = _gameData.playerData.MaxHealth;
             creatureStaminaComponent.MaxValue = _gameData.playerData.MaxStamina;
             satietyComponent.MaxValue = _gameData.playerData.MaxSatiety;

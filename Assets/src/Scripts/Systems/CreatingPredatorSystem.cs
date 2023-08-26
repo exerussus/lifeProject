@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.Di;
 using src.Scripts.Abstraction;
@@ -44,9 +43,9 @@ namespace src.Scripts.Systems
             _predatorPool.Value.Add(newEntity);
             _movePointPool.Value.Add(newEntity);
             _moveStatePool.Value.Add(newEntity);
+            _memoryPool.Value.Add(newEntity);
             ref var transformComponent = ref _transformPool.Value.Add(newEntity);
             ref var fractionComponent = ref _fractionPool.Value.Add(newEntity);
-            ref var memoryComponent = ref _memoryPool.Value.Add(newEntity);
             ref var creatureHealthComponent = ref _creatureHealthPool.Value.Add(newEntity);
             ref var creatureStaminaComponent = ref _creatureStaminaPool.Value.Add(newEntity);
             ref var moveSpeedComponent = ref _moveSpeedPool.Value.Add(newEntity);
@@ -59,7 +58,7 @@ namespace src.Scripts.Systems
             entityHandler.Init(newEntity);
             
             rotationSpeedComponent.value = _gameData.predatorData.RotationSpeed;
-            memoryComponent.detectedEntities = new List<EntityHandler>();
+
             creatureHealthComponent.MaxValue = _gameData.predatorData.MaxHealth;
             creatureStaminaComponent.MaxValue = _gameData.predatorData.MaxStamina;
             satietyComponent.MaxValue = _gameData.predatorData.MaxSatiety;
